@@ -1,0 +1,4 @@
+obj_*
+.dep
+*.map
+*_lufa.*

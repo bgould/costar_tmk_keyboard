@@ -1,0 +1,6 @@
+[submodule "costar_keyboard"]
+	path = costar_keyboard
+	url = https://github.com/BathroomEpiphanies/costar_keyboard
+[submodule "tmk_keyboard"]
+	path = tmk_keyboard
+	url = https://github.com/tmk/tmk_keyboard
