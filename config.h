@@ -31,14 +31,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MATRIX_COLS 8
 
 /* Set 0 if debouncing isn't needed */
-#define DEBOUNCE    5
+#define DEBOUNCE    5 
 
 /* key combination for command */
 #define IS_COMMAND() ( \
     keyboard_report->mods == (MOD_BIT(KC_LSHIFT) | MOD_BIT(KC_RSHIFT)) \
 )
 
-
+/* faster mousekeys than the default */
+#define MOUSEKEY_MOVE_DELTA           3
+#define MOUSEKEY_WHEEL_DELTA          1
+#define MOUSEKEY_DELAY                0
+#define MOUSEKEY_INTERVAL            20
+#define MOUSEKEY_MAX_SPEED           10
+#define MOUSEKEY_TIME_TO_MAX         20
+#define MOUSEKEY_WHEEL_MAX_SPEED     16
+#define MOUSEKEY_WHEEL_TIME_TO_MAX   40
 
 /*
  * Feature disable options

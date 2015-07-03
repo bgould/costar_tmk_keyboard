@@ -39,45 +39,45 @@ static matrix_row_t matrix_debouncing[MATRIX_ROWS];
 
 static matrix_row_t read_cols(void);
 
+/* number of matrix rows */
 inline
 uint8_t matrix_rows(void) {
   return MATRIX_ROWS;
 }
 
+/* number of matrix columns */
 inline
 uint8_t matrix_cols(void) {
   return MATRIX_COLS;
 }
 
+/* intialize matrix for scaning. should be called once. */
 void matrix_init(void) {
-  debug_enable = true;
-  debug_keyboard = true;
-  debug_matrix = true;
-  debug_mouse = true;
 
-  dprintf("Initializing matrix...\n");
   // initialize row and col
   release_rows();
   pins_init();
-
+  
   // initialize matrix state: all keys off
   for (uint8_t i=0; i < MATRIX_ROWS; i++) {
     matrix[i] = 0;
     matrix_debouncing[i] = 0;
   }
-  dprintf("Initialization completed...\n");
+
 }
 
+/* scan all key states on matrix */
 uint8_t matrix_scan(void) {
   for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
     pull_row(i);
     _delay_us(30);  // without this wait read unstable value.
-    matrix_row_t cols = read_cols();
+    matrix_row_t cols = 0;
+    for (uint8_t j = 0; j < MATRIX_COLS; j++) {
+      cols <<= 1;
+      cols  |= probe_column(j);
+    }
     if (matrix_debouncing[i] != cols) {
       matrix_debouncing[i] = cols;
-      if (debouncing) {
-        debug("bounce!: "); debug_hex(debouncing); debug("\n");
-      }
       debouncing = DEBOUNCE;
     }
     release_rows();
@@ -87,54 +87,35 @@ uint8_t matrix_scan(void) {
       _delay_ms(1);
     } else {
       for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
-        matrix[i] = matrix_debouncing[i];
+        matrix[i] = bitrev(matrix_debouncing[i]);
       }
     }
   }
   return 1;
 }
 
-bool matrix_is_modified(void) {
-  if (debouncing) return false;
-  return true;
-}
+/* whether modified from previous scan. used after matrix_scan. */
+// bool matrix_is_modified(void) __attribute__ ((deprecated));
 
+/* whether a swtich is on */
 inline
 bool matrix_is_on(uint8_t row, uint8_t col) {
   return (matrix[row] & ((matrix_row_t)1<<col));
 }
 
+/* matrix state on row */
 inline
 matrix_row_t matrix_get_row(uint8_t row) {
   return matrix[row];
 }
 
-void matrix_print(void)
-{
+/* print matrix for debug */
+void matrix_print(void) {
   print("\nr/c 0123456789ABCDEF\n");
   for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
     phex(row); print(": ");
     pbin_reverse16(matrix_get_row(row));
     print("\n");
   }
-}
-
-uint8_t matrix_key_count(void)
-{
-  uint8_t count = 0;
-  for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
-      count += bitpop16(matrix[i]);
-  }
-  return count;
-}
-
-static matrix_row_t read_cols(void)
-{
-  matrix_row_t cols = 0;
-  for (uint8_t i = 0; i < MATRIX_COLS; i++) {
-    cols <<= 1;
-    cols  |= probe_column(i);
-  }
-  return cols;
 }
 
