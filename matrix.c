@@ -57,7 +57,10 @@ void matrix_init(void) {
   // initialize row and col
   release_rows();
   pins_init();
-  
+
+  // make sure the LEDs start out on the 'off' state
+  update_leds(0);
+
   // initialize matrix state: all keys off
   for (uint8_t i=0; i < MATRIX_ROWS; i++) {
     matrix[i] = 0;

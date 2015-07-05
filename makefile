@@ -46,7 +46,7 @@
 ## Keyboard models. Un-comment the options you want.
 
 #MODEL = flake_20130602
-#MODEL = flake_20140521
+MODEL = flake_20140521
 #MODEL = hoof_20131001
 #MODEL = hoof_20150108
 #MODEL = paw_20130602
@@ -109,10 +109,10 @@ OPT_DEFS += \
 BOOTMAGIC_ENABLE = yes	# Virtual DIP switch configuration(+1000)
 MOUSEKEY_ENABLE = yes	# Mouse keys(+5000)
 EXTRAKEY_ENABLE = yes	# Audio control and System control(+600)
-#CONSOLE_ENABLE = yes    # Console for debug
+CONSOLE_ENABLE = yes    # Console for debug
 COMMAND_ENABLE = yes    # Commands for debug and configuration
 #SLEEP_LED_ENABLE = yes  # Breathing sleep LED during USB suspend
-NKRO_ENABLE = yes	# USB Nkey Rollover(+500)
+#NKRO_ENABLE = yes	# USB Nkey Rollover(+500)
 
 
 # Search Path

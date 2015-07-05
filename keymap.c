@@ -36,7 +36,7 @@ const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    */
   KEYMAP(
     GRV,        F1,  F2,  F3,  F4,  F5,  F6,  F7,  F8,  F9, F10, F11, F12,   PSCR,SLCK,PAUS,          
-    ESC,    1,   2,   3,   4,   5,   6,   7,   8,   9,   0,MINS, EQL,BSPC,   INS,HOME,PGUP,    NLCK,PSLS,PAST,PMNS,
+    ESC,    1,   2,   3,   4,   5,   6,   7,   8,   9,   0,MINS, EQL,BSPC,   INS, HOME,PGUP,   NLCK,PSLS,PAST,PMNS,
     TAB,    Q,   W,   E,   R,   T,   Y,   U,   I,   O,   P,LBRC,RBRC,BSLS,   DEL, END,PGDN,    P7,  P8,  P9,PPLS,  
     LCTL,   A,   S,   D,   F,   G,   H,   J,   K,   L,SCLN,QUOT,      ENT,                     P4,  P5,  P6,       
     LSFT,NUBS,   Z,   X,   C,   V,   B,   N,   M,COMM, DOT,SLSH,     RSFT,         UP,         P1,  P2,  P3,PENT, 
@@ -47,7 +47,7 @@ const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     NO, NO, NO, NO, NO, NO, NO
   ),
 
-  /* 1: vim/mouse layer 
+  /* 1: vim/mouse layer
    * ,---.   ,---------------. ,---------------. ,---------------. ,-----------.     ,-----------.
    * |   |   |   |   |   |   | |   |   |   |   | |   |   |   |   | |   |   |   |     |   |   |   |
    * `---'   `---------------' `---------------' `---------------' `-----------'     `-----------'
@@ -64,12 +64,12 @@ const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * `-----------------------------------------------------------' `-----------' `---------------'
    */
   KEYMAP(
-    TRNS,     TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,   TRNS,TRNS,TRNS,
+    TRNS,     TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,MUTE,VOLD,VOLU,   TRNS,TRNS,TRNS,   
     TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,   BTN1,MS_U,BTN2,    TRNS,TRNS,TRNS,TRNS,
     TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,PGUP,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,   MS_L,MS_D,MS_R,    TRNS,TRNS,TRNS,TRNS,
     TRNS,TRNS,TRNS,PGDN,TRNS,TRNS,LEFT,DOWN,UP,  RGHT,TRNS,TRNS,     TRNS,                      TRNS,TRNS,TRNS,
     TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,TRNS,     TRNS,        WH_U,         TRNS,TRNS,TRNS,TRNS,
-    TRNS,TRNS,TRNS,          TRNS,                    TRNS,TRNS,TRNS,CAPS,   WH_L,WH_D,WH_R,    TRNS,     TRNS,
+    TRNS,TRNS,TRNS,          FN1,                     TRNS,TRNS,TRNS,CAPS,   WH_L,WH_D,WH_R,    TRNS,     TRNS,
     \
     NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, 
     NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO, NO,
@@ -78,7 +78,29 @@ const uint8_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
-const uint16_t PROGMEM fn_actions[] = {
-    [0] = ACTION_LAYER_TAP_KEY(1, KC_SPACE),
+enum macro_id {
+  LAMBDA,
 };
+
+const uint16_t PROGMEM fn_actions[] = {
+  [0] = ACTION_LAYER_TAP_KEY(1, KC_SPACE),
+  [1] = ACTION_MACRO(LAMBDA),
+};
+
+#define TYPE_LAMBDA MACRO( \
+  D(LCTRL), D(LSHIFT), T(U), U(LCTRL), U(LSHIFT), \
+  T(0), T(3), T(B), T(B), T(SPACE), T(SPACE), END \
+)
+
+/*
+ * Macro definition
+ */
+const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
+{
+  switch (id) {
+    case LAMBDA:
+      return (record->event.pressed ? TYPE_LAMBDA : MACRO_NONE );
+  }
+  return MACRO_NONE;
+}
 
